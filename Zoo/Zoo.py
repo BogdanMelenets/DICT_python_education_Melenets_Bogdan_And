@@ -122,7 +122,18 @@ _________________               _________________
 It’s doing fine."""
 
 animals = [camel, lion, deer,  goose, bat, rabbit]
-f = int(input("Please enter the number of the habitat you would like to view: "))-1
-print (animals[f])
-print("You've reached the end of the program.")
+ff=""
+while ff != "exit" :
+    print("1 >  Camel")
+    print("2 >  Lion")
+    print("3 >  Deer")
+    print("4 >  Goose")
+    print("5 >  Bat")
+    print("6 >  Rabbit")
+    print("exit")
+    ff=input("Please enter the number of the habitat you would like to view: ")
+    if ff in ["1", "2", "3", "4", "5", "6"]:
+        f = int(ff)-1
+        print (animals[f])
+print("See you later!")
 
