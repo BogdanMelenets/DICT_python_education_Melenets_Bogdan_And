@@ -1,4 +1,21 @@
-print("I love animals!")
-print("Let's check out the animals...")
-print("The deer looks fine.")
-print("The lion looks healthy.")
+camel = r"""
+The camel habitat...
+___.-''''-.
+ /___  @  |
+ ',,,,.     |         _.'''''''._
+     '     |        /           \
+      |     \    _.-'             \
+      |      '.-'                  '-.
+      |                               ',
+      |                                '',
+       ',,-,                           ':;
+            ',,| ;,,                 ,' ;;
+               ! ; !'',,,',',,,,'!  ;   ;:
+              : ;  ! ! ! ! ! ! ! ! ; ;   :;
+              ; ;  ! ! ! ! ! ! ! ! ; ;  ;,
+             ; ;  ! ! ! ! ! ! ! ! ; ;   ;
+             ; ;  ! ! ! ! ! ! ! ! ; ; ;
+             ;,,  !,! !,! !,! !,! ;,; 
+             /_I_ L_I_L_I_L_I_L_I_/_I_
+Look at that!"""
+print(camel)
