@@ -73,3 +73,49 @@ def user_move(cells):
         # Робимо хід
         cells[index] = "X"
         return cells
+
+def tic_tac_toe_game():
+    # Порожнє поле
+    cells = ["_"] * 9
+
+    print_grid(cells)
+
+    current_player = "X"
+
+    while True:
+        # ХІД КОРИСТУВАЧА
+        while True:
+            coords = input("Enter the coordinates: ").split()
+
+            # Перевірка
+            if not all(c.isdigit() for c in coords):
+                print("You should enter numbers!")
+                continue
+
+            x, y = map(int, coords)
+
+            if x not in [1, 2, 3] or y not in [1, 2, 3]:
+                print("Coordinates should be from 1 to 3!")
+                continue
+
+            # Індекс у списку
+            index = (x - 1) * 3 + (y - 1)
+
+            if cells[index] != "_":
+                print("This cell is occupied! Choose another one!")
+                continue
+
+            # Робимо хід
+            cells[index] = current_player
+            break
+
+        print_grid(cells)
+
+        # Перевірка результату
+        result = check_win(cells)
+        if result != "Game not finished":
+            print(result)
+            break
+
+        # Зміна гравця
+        current_player = "O" if current_player == "X" else "X"
