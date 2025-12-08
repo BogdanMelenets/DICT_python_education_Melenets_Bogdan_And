@@ -14,3 +14,11 @@ else:
 
     for key in friends:
         friends[key] = split_amount
+    answer = input('Do you want to use the "Who is lucky?" feature? Write Yes/No:\n')
+
+    if answer == "Yes":
+        lucky_one = random.choice(list(friends.keys()))
+        print(f"{lucky_one} is the lucky one!")
+    else:
+        lucky_one = None
+        print("No one is going to be lucky")
