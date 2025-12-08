@@ -9,16 +9,23 @@ else:
         name = input()
         friends[name] = 0
     total_amount = int(input("Enter the total amount:\n"))
-
     split_amount = round(total_amount / num_friends, 2)
-
     for key in friends:
         friends[key] = split_amount
     answer = input('Do you want to use the "Who is lucky?" feature? Write Yes/No:\n')
-
     if answer == "Yes":
         lucky_one = random.choice(list(friends.keys()))
         print(f"{lucky_one} is the lucky one!")
     else:
         lucky_one = None
         print("No one is going to be lucky")
+    if lucky_one is not None:
+        # lucky = платить 0
+        not_lucky_count = num_friends - 1
+        new_split = round(total_amount / not_lucky_count, 2)
+        for key in friends:
+            if key == lucky_one:
+                friends[key] = 0
+            else:
+                friends[key] = new_split
+    print(friends)
