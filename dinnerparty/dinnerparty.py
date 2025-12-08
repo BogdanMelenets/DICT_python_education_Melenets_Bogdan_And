@@ -8,3 +8,9 @@ else:
     for _ in range(num_friends):
         name = input()
         friends[name] = 0
+    total_amount = int(input("Enter the total amount:\n"))
+
+    split_amount = round(total_amount / num_friends, 2)
+
+    for key in friends:
+        friends[key] = split_amount
