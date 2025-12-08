@@ -1,43 +1,31 @@
 import random
-print("Enter the number of friends joining (including you):")
-coun=input (">")
-count = int(coun)-1
-friends= {}
-if count > 0:
-    print("Enter the name of every friend (including you), each on a new line:")
-    i=0
-    while i < count:
-        fr=input(">")
-        friends.update({fr :0})
-        i=i+1
-    for Fr, value in friends.items():
-        print(f'{Fr}: {value}')
-    print("Enter the total amount")
-    su = input(">")
-    sum = float(su)
-    sumone=round(sum/(count + 1), 2)
-    for i in friends:
-        friends[i]=sumone
-    for Fr, value in friends.items():
-        print(f'{Fr}: {value}')
-    print("Do you want to use the 'Who is lucky?' feature? Write Yes/No:")
-    luc=input (">")
-    if luc=="Yes":
-        ii=random.randint(0, count-1)
-        jj=0
-        newsumone = round(sum / (count), 2)
-        lucky=""
-        for Fr, value in friends.items():
-            if jj==ii:
-                 lucky=f'{Fr}'
-                 print(lucky, "is the lucky one!")
-            jj=jj+1
-        for i1 in friends:
-            friends[i1] = newsumone
-        friends[lucky] = 0
-        for Fr, value in friends.items():
-            print(f'{Fr}: {value}')
-    else:
-        print("No one is going to be lucky.")
-else:
+num_friends = int(input("Enter the number of friends joining (including you):\n"))
+if num_friends <= 0:
     print("No one is joining for the party")
+else:
+    print("Enter the name of every friend (including you), each on a new line:")
+    friends = {}
+    for _ in range(num_friends):
+        name = input()
+        friends[name] = 0
+    total_amount = int(input("Enter the total amount:\n"))
+    split_amount = round(total_amount / num_friends, 2)
+    for key in friends:
+        friends[key] = split_amount
+    answer = input('Do you want to use the "Who is lucky?" feature? Write Yes/No:\n')
+    if answer == "Yes":
+        lucky_one = random.choice(list(friends.keys()))
+        print(f"{lucky_one} is the lucky one!")
+    else:
+        lucky_one = None
+        print("No one is going to be lucky")
+    if lucky_one is not None:
+        # lucky = платить 0
+        not_lucky_count = num_friends - 1
+        new_split = round(total_amount / not_lucky_count, 2)
+        for key in friends:
+            if key == lucky_one:
+                friends[key] = 0
+            else:
+                friends[key] = new_split
+    print(friends)
