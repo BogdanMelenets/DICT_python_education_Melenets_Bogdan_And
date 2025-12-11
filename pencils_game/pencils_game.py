@@ -35,3 +35,30 @@ def bot_move(pencils_left):
         return 2
     if pencils_left % 4 == 2:
         return 1
+
+while pencils > 0:
+    print(f"{current_player}'s turn:")
+    # Хід користувача
+    if current_player == user:
+        move = input()
+        if move not in ["1", "2", "3"]:    # Перевірка правильності
+            print("Possible values: '1', '2' or '3'")
+            continue
+        move = int(move)
+        if move > pencils:  # Забагато взято
+            print("Too many pencils were taken")
+            continue
+    # Хід бота
+    else:
+        move = bot_move(pencils)   # Хід бота за стратегією
+        print(move)
+    # Зменшуємо кількість олівців
+    pencils -= move
+    if pencils == 0:
+        break
+    print("|" * pencils)
+    # Зміна гравця
+    current_player = bot if current_player == user else user
+# Визначення переможця
+winner = bot if current_player == user else user
+print(f"{winner} won!")
