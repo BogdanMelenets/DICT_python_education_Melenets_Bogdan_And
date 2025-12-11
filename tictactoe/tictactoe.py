@@ -43,3 +43,24 @@ def check_winner(grid):
         return "Game not finished"
     return "Draw"
 
+def get_valid_move(grid):
+    while True:
+        coords = input("Enter the coordinates: ").split()
+        # Перевірка — введено не числа
+        if not all(c.isdigit() for c in coords):
+            print("You should enter numbers!")
+            continue
+        x, y = map(int, coords)
+        # Перевірка діапазону
+        if not (1 <= x <= 3 and 1 <= y <= 3):
+            print("Coordinates should be from 1 to 3!")
+            continue
+        # Перетворення координат у індекси
+        row = x - 1
+        col = y - 1
+        # Перевірка зайнятості клітинки
+        if grid[row][col] != "_":
+            print("This cell is occupied! Choose another one!")
+            continue
+        return row, col
+
