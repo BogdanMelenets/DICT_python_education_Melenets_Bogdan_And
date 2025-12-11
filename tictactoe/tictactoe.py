@@ -64,3 +64,27 @@ def get_valid_move(grid):
             continue
         return row, col
 
+def play_game():
+    # Початкове порожнє поле
+    grid = [["_", "_", "_"],
+            ["_", "_", "_"],
+            ["_", "_", "_"]]
+    print_grid(grid)
+    current = "X"   # Ходить X першим
+    while True:
+        # Отримати хід
+        row, col = get_valid_move(grid)
+        # Поставити символ
+        grid[row][col] = current
+        # Вивести оновлену сітку
+        print_grid(grid)
+        # Перевірити результат
+        result = check_winner(grid)
+        if result != "Game not finished":
+            print(result)
+            break
+        # Зміна гравця
+        current = "O" if current == "X" else "X"
+# Запуск гри
+play_game()
+
