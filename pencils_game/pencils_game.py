@@ -24,3 +24,14 @@ while True:
 print("|" * pencils)
 current_player = first   # Хто ходить зараз
 
+def bot_move(pencils_left):
+    # Програшні позиції: 1, 5, 9, 13...
+    if pencils_left % 4 == 1:
+        return random.randint(1, 3)  # Беремо будь-яке число
+    # Виграшні позиції:
+    if pencils_left % 4 == 0:
+        return 3
+    if pencils_left % 4 == 3:
+        return 2
+    if pencils_left % 4 == 2:
+        return 1
