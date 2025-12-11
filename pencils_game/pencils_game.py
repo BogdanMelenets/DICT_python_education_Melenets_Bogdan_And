@@ -13,3 +13,14 @@ while True:
 # Імена гравців
 user = "John"
 bot = "Jack"
+
+while True:
+    first = input(f"Who will be the first ({user}, {bot}):\n")
+    if first not in [user, bot]:
+        print(f"Choose between '{user}' and '{bot}'")
+        continue
+    break
+# Виводимо стартову кількість олівців
+print("|" * pencils)
+current_player = first   # Хто ходить зараз
+
