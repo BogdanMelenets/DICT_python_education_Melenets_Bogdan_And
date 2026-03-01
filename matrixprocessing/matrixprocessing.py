@@ -133,12 +133,22 @@ def read_matrix():
    return stroka1, stolb1,data1
 
 # Stage 1
+#print('Вхід')
+#stb1, str1, dt1 = read_matrix()
+#stb2, str2, dt2 = read_matrix()
+#res_sum = [[0 for _ in range(str1)] for _ in range(stb1)]
+#mult =   MatrixProcessing (stb1, str1, dt1, stb2, str2, dt2, 0, 0, res_sum,'SUM', '', 1)
+#print('Вихід')
+#print (*mult.multipl_matrix(), sep='\n')
+
+#Stage 2
 print('Вхід')
 stb1, str1, dt1 = read_matrix()
-stb2, str2, dt2 = read_matrix()
+chislo = int(input())
+stb2=0
+str2=0
+dt2=[],[]
 res_sum = [[0 for _ in range(str1)] for _ in range(stb1)]
-mult =   MatrixProcessing (stb1, str1, dt1, stb2, str2, dt2, 0, 0, res_sum,'SUM', '', 1)
+mult =   MatrixProcessing (stb1, str1, dt1, stb2, str2, dt2, 0, 0, res_sum,'CONST', '', chislo)
 print('Вихід')
 print (*mult.multipl_matrix(), sep='\n')
-
-
