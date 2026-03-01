@@ -68,6 +68,26 @@ class MatrixProcessing:
                     sj = sj + 1
                 si = si + 1
             return self.data_res
+
+        if self.diya == 'MULTIPLAY':
+            if self.stolb1 != self.stroka2:
+                self.error = 'ERROR'
+                return self.error
+            else:
+                self.error = 'NOT ERROR'
+                si = 0
+                while si < self.stolb1:
+                    sj = 0
+                    while sj < self.stolb1:
+                        sk = 0
+                        while sk < self.stroka1:
+                           self.data_res[si][sj] = self.data_res [si][sj] + self.data1[si][sk] * self.data2[sk][sj]
+                           sk=sk+1
+                        sj = sj + 1
+                    si = si + 1
+                return self.data_res
+
+
         return {self.error}
 
 
@@ -79,14 +99,14 @@ class MatrixProcessing:
 
 def read_matrix():
    # зчитуємо розмір матриці
-   size1=input()
+   size1=input('Enter size of matrix: >')
    # розмір розділений пробілом, знаходимо позицію пробілу
    probel=size1.find(' ')
    stlb1=''
 # символи до пробілу складають число столбців, зчитуємо їх та переводимо у число
    for i in range(probel):
        stlb1=stlb1+size1[i]
- #  stolb1 = int(stlb1)
+   print('Enter matrix:')
    stroka1 = int(stlb1)
 # символи після пробілу складають число строк, зчитуємо їх та переводимо у число
    str1=''
@@ -103,7 +123,7 @@ def read_matrix():
    i=1
 # за кількістю строк зчитуємо строки з даними матриці
    while i < stroka1+1:
-      str_data1 = input (' ')
+      str_data1 = input ('> ')
    # символи до пробілу означають число
       str_data1=str_data1+' '
       elem_nomer=1
@@ -132,23 +152,45 @@ def read_matrix():
 
    return stroka1, stolb1,data1
 
-# Stage 1
-#print('Вхід')
-#stb1, str1, dt1 = read_matrix()
-#stb2, str2, dt2 = read_matrix()
-#res_sum = [[0 for _ in range(str1)] for _ in range(stb1)]
-#mult =   MatrixProcessing (stb1, str1, dt1, stb2, str2, dt2, 0, 0, res_sum,'SUM', '', 1)
-#print('Вихід')
-#print (*mult.multipl_matrix(), sep='\n')
-
-#Stage 2
-print('Вхід')
-stb1, str1, dt1 = read_matrix()
-chislo = int(input())
-stb2=0
-str2=0
-dt2=[],[]
-res_sum = [[0 for _ in range(str1)] for _ in range(stb1)]
-mult =   MatrixProcessing (stb1, str1, dt1, stb2, str2, dt2, 0, 0, res_sum,'CONST', '', chislo)
-print('Вихід')
-print (*mult.multipl_matrix(), sep='\n')
+menu=''
+while menu != '0':
+    print('1. Add matrices')
+    print('2. Multiply matrix by a constant')
+    print('3. Multiply matrices')
+    print('0. Exit')
+    menu=input('Enter your choice: >')
+    if menu=='1':
+      # Stage 1
+      print ('First matrix')
+      stb1, str1, dt1 = read_matrix()
+      print('Second matrix')
+      stb2, str2, dt2 = read_matrix()
+      res_sum = [[0 for _ in range(str1)] for _ in range(stb1)]
+      mult =   MatrixProcessing (stb1, str1, dt1, stb2, str2, dt2, 0, 0, res_sum,'SUM', '', 1)
+      print('The result is:')
+      print (*mult.multipl_matrix(), sep='\n')
+    if menu=='2':
+      #Stage 2
+      stb1, str1, dt1 = read_matrix()
+      chislo = int(input('Enter constant: >'))
+      stb2=0
+      str2=0
+      dt2=[],[]
+      res_sum = [[0 for _ in range(str1)] for _ in range(stb1)]
+      mult =   MatrixProcessing (stb1, str1, dt1, stb2, str2, dt2, 0, 0, res_sum,'CONST', '', chislo)
+      print('The result is:')
+      print (*mult.multipl_matrix(), sep='\n')
+    if menu=='3':
+      # Stage 3
+      print('First matrix')
+      stb1, str1, dt1 = read_matrix()
+      print('Second matrix')
+      stb2, str2, dt2 = read_matrix()
+      if stb1>stb2 or stb1==stb2 :
+          res_sum = [[0 for _ in range(stb1)] for _ in range(stb1)]
+          mult =   MatrixProcessing (stb1, str1, dt1, stb2, str2, dt2, 0, 0, res_sum,'MULTIPLAY', '', 1)
+      else:
+          res_sum = [[0 for _ in range(stb2)] for _ in range(stb2)]
+          mult =   MatrixProcessing (stb2, str2, dt2, stb1, str1, dt1, 0, 0, res_sum,'MULTIPLAY', '', 1)
+      print('The result is:')
+      print (*mult.multipl_matrix(), sep='\n')
