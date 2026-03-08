@@ -143,7 +143,31 @@ class MatrixProcessing:
                 si = si + 1
             return self.data_res
 
+        if self.diya == 'VIZN':
+            if self.stolb1 == self.stroka1:
+               self.error = 'NOT ERROR'
+               k=0
+               while k<self.stolb1-1:
+                   j=k+1
+                   while j<self.stolb1:
+                       r=self.data1 [j-1][k-1]/self.data1 [k-1][k-1]
+                       i=k
+                       while i<self.stolb1:
+                           res=self.data1 [k-1][i-1]*r
+                           self.data1[j-1][i-1]=self.data1 [j-1][i-1]-res
+                           i=i+1
+                       j=j+1
+                   k=k+1
+               d=1
+               i=1
+               while i<self.stolb1+1:
+                   d=d*self.data1[i-1][i-1]
+                   i=i+1
+               self.const=d
+               return self.const
+            else: self.error = 'ERROR'
         return {self.error}
+
 
 
     def print_matrix_res(self):
@@ -213,6 +237,7 @@ while menu != '0':
     print('2. Multiply matrix by a constant')
     print('3. Multiply matrices')
     print ('4. Transpose matrix')
+    print ('5. Calculate a determinant')
     print('0. Exit')
     menu=input('Enter your choice: >')
     if menu=='1':
@@ -273,5 +298,15 @@ while menu != '0':
             mult = MatrixProcessing(stb1, str1, dt1, stb2, str2, dt2, 0, 0, res_sum, 'TRANS_GG', '', 1)
         print('The result is:')
         print(*mult.multipl_matrix(), sep='\n')
+    if menu=='5':
+      #Stage 5
+      stb1, str1, dt1 = read_matrix()
+      stb2=0
+      str2=0
+      dt2=[],[]
+      res_sum = [[0 for _ in range(str1)] for _ in range(stb1)]
+      mult =   MatrixProcessing (stb1, str1, dt1, stb2, str2, dt2, 0, 0, res_sum,'VIZN', '', 1)
+      print('The result is:')
+      print (mult.multipl_matrix())
 
-    # Stage 1
+
