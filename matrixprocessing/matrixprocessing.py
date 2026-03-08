@@ -32,11 +32,11 @@ class MatrixProcessing:
        self.const = const
 
 
-    def error (self):
-       if self.diya == 'SUM':
-           if self.stolb1!=self.stolb2 or self.stroka1!=self.stroka2: self.error = 'ERROR'
-       else: self.error = 'NOT ERROR'
-       return self.error
+ #   def error (self):
+ #      if self.diya == 'SUM':
+ #          if self.stolb1!=self.stolb2 or self.stroka1!=self.stroka2: self.error = 'ERROR'
+ #      else: self.error = 'NOT ERROR'
+ #      return self.error
 
     def multipl_matrix(self):
         if self.diya == 'SUM':
@@ -87,6 +87,61 @@ class MatrixProcessing:
                     si = si + 1
                 return self.data_res
 
+        if self.diya == 'TRANS_P':
+            self.error = 'NOT ERROR'
+            si = 0
+            while si < self.stolb1:
+
+                sj = 0
+                while sj < self.stroka1:
+
+                    self.data_res[self.stroka1-sj-1][self.stolb1 - si-1] = self.data1[si][sj]
+
+                    sj = sj + 1
+                si = si + 1
+            return self.data_res
+
+        if self.diya == 'TRANS_G':
+            self.error = 'NOT ERROR'
+            si = 0
+            while si < self.stolb1:
+
+                sj = 0
+                while sj < self.stroka1:
+
+                    self.data_res[sj][si] = self.data1[si][sj]
+
+                    sj = sj + 1
+                si = si + 1
+            return self.data_res
+
+        if self.diya == 'TRANS_LG':
+            self.error = 'NOT ERROR'
+            si = 0
+            while si < self.stolb1:
+
+                sj = 0
+                while sj < self.stroka1:
+                    self.data_res[si][sj] = self.data1[si][self.stroka1-1-sj]
+
+                    sj = sj + 1
+                si = si + 1
+            return self.data_res
+
+        if self.diya == 'TRANS_GG':
+            self.error = 'NOT ERROR'
+            si = 0
+            while si < self.stolb1:
+
+                sj = 0
+                while sj < self.stroka1:
+                  #  print('self.stroka1', self.stroka1, ' self.stolb1 ', self.stolb1, ' sj ', sj, ' si ', si)
+                  #  print (self.data_res)
+                    self.data_res[si][sj] = self.data1[self.stolb1-1-si][sj]
+
+                    sj = sj + 1
+                si = si + 1
+            return self.data_res
 
         return {self.error}
 
@@ -157,6 +212,7 @@ while menu != '0':
     print('1. Add matrices')
     print('2. Multiply matrix by a constant')
     print('3. Multiply matrices')
+    print ('4. Transpose matrix')
     print('0. Exit')
     menu=input('Enter your choice: >')
     if menu=='1':
@@ -194,3 +250,28 @@ while menu != '0':
           mult =   MatrixProcessing (stb2, str2, dt2, stb1, str1, dt1, 0, 0, res_sum,'MULTIPLAY', '', 1)
       print('The result is:')
       print (*mult.multipl_matrix(), sep='\n')
+    if menu == '4':
+        print('1. Main diagonal')
+        print('2. Side diagonal')
+        print('3. Vertical line')
+        print('4. Horizontal line')
+        trans = int(input('Your choice: >'))
+        stb1, str1, dt1 = read_matrix()
+        stb2 = 0
+        str2 = 0
+        dt2 = [], []
+        res_sum = [[0 for _ in range(stb1)] for _ in range(str1)]
+        if trans == 1:
+            mult = MatrixProcessing(stb1, str1, dt1, stb2, str2, dt2, 0, 0, res_sum, 'TRANS_G', '', 1)
+        if trans==2:
+            mult = MatrixProcessing(stb1, str1, dt1, stb2, str2, dt2, 0, 0, res_sum, 'TRANS_P', '', 1)
+        if trans == 3:
+            res_sum = [[0 for _ in range(str1)] for _ in range(stb1)]
+            mult = MatrixProcessing(stb1, str1, dt1, stb2, str2, dt2, 0, 0, res_sum, 'TRANS_LG', '', 1)
+        if trans==4:
+            res_sum = [[0 for _ in range(str1)] for _ in range(stb1)]
+            mult = MatrixProcessing(stb1, str1, dt1, stb2, str2, dt2, 0, 0, res_sum, 'TRANS_GG', '', 1)
+        print('The result is:')
+        print(*mult.multipl_matrix(), sep='\n')
+
+    # Stage 1
