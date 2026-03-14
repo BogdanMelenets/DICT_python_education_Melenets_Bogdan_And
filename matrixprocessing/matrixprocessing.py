@@ -32,11 +32,136 @@ class MatrixProcessing:
        self.const = const
 
 
- #   def error (self):
- #      if self.diya == 'SUM':
- #          if self.stolb1!=self.stolb2 or self.stroka1!=self.stroka2: self.error = 'ERROR'
- #      else: self.error = 'NOT ERROR'
- #      return self.error
+    def matrix_vn(self):
+        # Метод Гауса
+        k = 0
+        while k < self.stolb1 - 1:
+            j = k + 1
+            while j < self.stolb1:
+                r = self.data1[j - 1][k - 1] / self.data1[k - 1][k - 1]
+                i = k
+                while i < self.stolb1:
+                    res = self.data1[k - 1][i - 1] * r
+                    self.data1[j - 1][i - 1] = self.data1[j - 1][i - 1] - res
+                    i = i + 1
+                j = j + 1
+            k = k + 1
+        d = 1
+        i = 1
+        while i < self.stolb1 + 1:
+            d = d * self.data1[i - 1][i - 1]
+            i = i + 1
+        self.const = d
+        return self.const
+
+    def matrix_transG (self):
+        self.error = 'NOT ERROR'
+        si = 0
+        while si < self.stolb1:
+
+         sj = 0
+         while sj < self.stroka1:
+            self.data_res[sj][si] = self.data1[si][sj]
+            sj = sj + 1
+         si = si + 1
+
+        return self.data_res
+
+    def matrix_transP(self):
+       self.error = 'NOT ERROR'
+       si = 0
+       while si < self.stolb1:
+
+           sj = 0
+           while sj < self.stroka1:
+               self.data_res[self.stroka1 - sj - 1][self.stolb1 - si - 1] = self.data1[si][sj]
+
+               sj = sj + 1
+           si = si + 1
+       return self.data_res
+
+    def matrix_const (self):
+        self.error = 'NOT ERROR'
+        si = 0
+        while si < self.stolb1:
+
+           sj = 0
+           while sj < self.stroka1:
+               self.data_res[si][sj] = self.data1[si][sj] * self.const
+
+               sj = sj + 1
+           si = si + 1
+        return self.data_res
+
+    def matrix_inverse (self):
+      n=self.stolb1
+      B = [[0 for _ in range(n)] for _ in range(n)]
+      singular=False
+      i=1
+      while i<=n:
+          j=1
+          while j<=n:
+              if i==j:
+                  B[i-1][j-1]=1
+              else:
+                  B[i-1][j-1]=0
+              j=j+1
+          i=i+1
+      k=1
+      A = self.data1
+
+      while k<=n:
+          p=k
+          maxABS=A[k-1][k-1]
+
+          if maxABS<0: maxABS=-1*maxABS
+          i=k+1
+          while i<=n:
+              curABS=A[i-1][k-1]
+              if curABS<0: curABS=-1*curABS
+              if curABS>maxABS:
+                  maxABS=curABS
+                  p=i
+              i=i+1
+
+          if maxABS<0.0000000000001: singular=True
+          else:
+             if p!=k:
+                 j=1
+                 while j<=n:
+                     t=A[k-1][j-1]
+                     A[k-1][j-1]=A[p-1][j-1]
+                     A[p-1][j-1]=t
+                     t = B[k - 1][j - 1]
+                     B[k - 1][j - 1] = B[p - 1][j - 1]
+                     B[p - 1][j - 1] = t
+                     j=j+1
+             pivot=A[k-1][k-1]
+             j=1
+             while j<=n:
+                 A[k-1][j-1]=A[k-1][j-1]/pivot
+                 B[k - 1][j - 1] = B[k - 1][j - 1] / pivot
+                 j=j+1
+             i=1
+             while i<=n:
+                 if i!=k:
+                     factor=A[i-1][k-1]
+                     if factor!=0:
+                         j=1
+                         while j<=n:
+                             A[i-1][j-1]=A[i-1][j-1] - factor*A[k-1][j-1]
+                             B[i - 1][j - 1] = B [i - 1][j - 1] - factor * B[k - 1][j - 1]
+                             j=j+1
+                 i=i+1
+
+          k=k+1
+      if singular==True:
+          self.error = 'ERROR'
+          return self.error
+      else:
+          self.data_res=B
+          self.error = 'NOT ERROR'
+          return self.data_res
 
     def multipl_matrix(self):
         if self.diya == 'SUM':
@@ -56,18 +181,8 @@ class MatrixProcessing:
                         sj=sj+1
                     si=si+1
                 return self.data_res
-        if self.diya == 'CONST':
-            self.error = 'NOT ERROR'
-            si = 0
-            while si < self.stolb1:
 
-                sj = 0
-                while sj < self.stroka1:
-                    self.data_res[si][sj] = self.data1[si][sj] * self.const
-
-                    sj = sj + 1
-                si = si + 1
-            return self.data_res
+        if self.diya == 'CONST': return self.matrix_const()
 
         if self.diya == 'MULTIPLAY':
             if self.stolb1 != self.stroka2:
@@ -87,33 +202,9 @@ class MatrixProcessing:
                     si = si + 1
                 return self.data_res
 
-        if self.diya == 'TRANS_P':
-            self.error = 'NOT ERROR'
-            si = 0
-            while si < self.stolb1:
+        if self.diya == 'TRANS_P': return self.matrix_transP()
 
-                sj = 0
-                while sj < self.stroka1:
-
-                    self.data_res[self.stroka1-sj-1][self.stolb1 - si-1] = self.data1[si][sj]
-
-                    sj = sj + 1
-                si = si + 1
-            return self.data_res
-
-        if self.diya == 'TRANS_G':
-            self.error = 'NOT ERROR'
-            si = 0
-            while si < self.stolb1:
-
-                sj = 0
-                while sj < self.stroka1:
-
-                    self.data_res[sj][si] = self.data1[si][sj]
-
-                    sj = sj + 1
-                si = si + 1
-            return self.data_res
+        if self.diya == 'TRANS_G': return self.matrix_transG()
 
         if self.diya == 'TRANS_LG':
             self.error = 'NOT ERROR'
@@ -146,27 +237,13 @@ class MatrixProcessing:
         if self.diya == 'VIZN':
             if self.stolb1 == self.stroka1:
                self.error = 'NOT ERROR'
-               k=0
-               while k<self.stolb1-1:
-                   j=k+1
-                   while j<self.stolb1:
-                       r=self.data1 [j-1][k-1]/self.data1 [k-1][k-1]
-                       i=k
-                       while i<self.stolb1:
-                           res=self.data1 [k-1][i-1]*r
-                           self.data1[j-1][i-1]=self.data1 [j-1][i-1]-res
-                           i=i+1
-                       j=j+1
-                   k=k+1
-               d=1
-               i=1
-               while i<self.stolb1+1:
-                   d=d*self.data1[i-1][i-1]
-                   i=i+1
-               self.const=d
+               self.const = self.matrix_vn()
                return self.const
             else: self.error = 'ERROR'
-        return {self.error}
+
+        if self.diya == 'INVERSE': return self.matrix_inverse()
+
+        return self.error
 
 
 
@@ -233,12 +310,13 @@ def read_matrix():
 
 menu=''
 while menu != '0':
-    print('1. Add matrices')
-    print('2. Multiply matrix by a constant')
-    print('3. Multiply matrices')
+    print ('1. Add matrices')
+    print ('2. Multiply matrix by a constant')
+    print ('3. Multiply matrices')
     print ('4. Transpose matrix')
     print ('5. Calculate a determinant')
-    print('0. Exit')
+    print ('6. Inverse matrix')
+    print ('0. Exit')
     menu=input('Enter your choice: >')
     if menu=='1':
       # Stage 1
@@ -308,5 +386,14 @@ while menu != '0':
       mult =   MatrixProcessing (stb1, str1, dt1, stb2, str2, dt2, 0, 0, res_sum,'VIZN', '', 1)
       print('The result is:')
       print (mult.multipl_matrix())
-
+    if menu=='6':
+      #Stage 6
+      stb1, str1, dt1 = read_matrix()
+      stb2 = 0
+      str2 = 0
+      dt2 = [], []
+      res_sum = [[0 for _ in range(str1)] for _ in range(stb1)]
+      mult = MatrixProcessing(stb1, str1, dt1, stb2, str2, dt2, 0, 0, res_sum, 'INVERSE', '', 1)
+      print('The result is:')
+      print(*mult.multipl_matrix(), sep='\n')
 
