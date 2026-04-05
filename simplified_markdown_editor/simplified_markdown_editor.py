@@ -98,5 +98,8 @@ while menu != "!done" :
             result.append(new_line())
 
     else: print ("Unknown formatting type or command")
+    print(*result,sep="\n")
 
-    print(*result,sep = '\n')
+with open('output.md', 'w') as f:
+    for item in result:  f.write(f'{item}\n')
+    f.close()
