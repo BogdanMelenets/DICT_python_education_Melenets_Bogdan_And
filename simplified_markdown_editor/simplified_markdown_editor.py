@@ -100,7 +100,6 @@ while menu != "!done" :
     else: print ("Unknown formatting type or command")
     print(*result,sep="\n")
 
-
 with open('output.md', 'w') as f:
     for item in result:  f.write(f'{item}\n')
     f.close()
