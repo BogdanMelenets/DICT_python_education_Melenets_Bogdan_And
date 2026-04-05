@@ -1,29 +1,31 @@
 def help():
-    res="Available formatters: plain bold italic header link inline-code ordered-list unordered-list new-line Special commands: !help !done"
-    return res
+    return "Available formatters: plain bold italic header link inline-code ordered-list unordered-list new-line Special commands: !help !done"
 
 def plain():
-    res_plain="plain"
-    return res_plain
+    return input("Text: >")
 
 def bold():
-    res_bold="bold"
-    return res_bold
+    return "**"+input("Text: >")+"**"
 
 def italic():
-    res_italic="italic"
-    return res_italic
+    return "*" + input("Text: >") + "*"
 
 def inline_code():
-    res_inline_code="inline_code"
-    return res_inline_code
+    return "```" + input("Text: >") + "```"
 
 def link():
-    res_link="link"
-    return res_link
+    return "["+ input("Label: >")+"]("+ input("URL: >")+")"
 
 def header():
-    res_header="header"
+    res_header=""
+    Lev=0
+    while Lev not in range(1,6):
+        Lev= int(input("Level: >"))
+        if Lev in range(1,6):
+           string = input("Text: >")
+           for i in range(Lev): res_header=res_header+"#"
+           res_header = res_header + " " + string
+        else: print("The level should be within the range of 1 to 6.")
     return res_header
 
 def unordered_list():
@@ -35,31 +37,42 @@ def ordered_list():
     return res_ordered_list
 
 def new_line():
-    res_new_line="new_line"
-    return res_new_line
+    return ""
 
 menu=""
+string=""
+result=[]
+resi=0
 while menu != "!done" :
     menu = input("Choose a formatter: >")
     if menu == "!help" :
           print(help())
-    if menu == "plain" :
-        print(plain())
-    if menu == "bold" :
-          print(bold())
-    if menu == "italic" :
-          print(italic())
-    if menu == "inline_code" :
-          print(inline_code())
-    if menu == "link" :
-          print(link())
-    if menu == "header" :
-          print(header())
-    if menu == "unordered_list" :
-          print(unordered_list())
-    if menu == "ordered_list" :
-          print(ordered_list())
-    if menu == "new_line" :
-        print(new_line())
-    if menu not in ["!done","!help","plain","bold","italic","inline_code","link","header","unordered_list",
-                    "ordered_list","new_line"]: print ("Unknown formatting type or command")
+    if menu in ["!done","!help","plain","bold","italic","inline_code","link","header","unordered_list",
+                    "ordered_list","new_line"]:
+        if menu == "plain":
+            result.append(plain())
+            resi = resi + 1
+        if menu == "bold":
+            result.append(bold())
+            resi = resi + 1
+        if menu == "italic":
+            result.append(italic())
+            resi = resi + 1
+        if menu == "inline_code":
+            result.append(inline_code())
+            resi = resi + 1
+        if menu == "link":
+            result.append(link())
+            resi = resi + 1
+        if menu == "header":
+            result.append(header())
+            resi=resi+1
+        if menu == "unordered_list":
+            print(unordered_list())
+        if menu == "ordered_list":
+            print(ordered_list())
+        if menu == "new_line":
+            result.append(new_line())
+            resi = resi + 1
+    else: print ("Unknown formatting type or command")
+    print(*result,sep = '\n')
