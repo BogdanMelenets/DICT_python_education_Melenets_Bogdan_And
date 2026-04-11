@@ -13,10 +13,21 @@ def rezult (a1, b1, o1, rez):
     return res
 
 oper=["+", "-", "*"]
-a=random.randint(2, 9)
-b=random.randint(2, 9)
-op=random.choice(oper)
-print(a,op,b)
-rezp=int(input (">"))
-
-print (rezult(a, b,op,rezp))
+i=1
+n=0
+while i<6:
+  a=random.randint(2, 9)
+  b=random.randint(2, 9)
+  op=random.choice(oper)
+  print(a,op,b)
+  korrect=1
+  while korrect == 1:
+    rezp=input (">")
+    try:
+      print(rezult(a, b, op, int(rezp)))
+      if rezult(a, b, op, int(rezp)) == "Right!": n = n + 1
+      i = i + 1
+      korrect = 0
+    except ValueError:
+      print("Incorrect format.")
+print(f"Your mark is {n}/5")
