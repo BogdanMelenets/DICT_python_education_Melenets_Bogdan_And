@@ -1,0 +1,3 @@
+RRRRgggg: 4/5 in level 3 - integral squares of 1-5
+TTTTTT: 0/5 in level 1 - simple operations with numbers 2-9
+dtfghhdg: 2/5 in level 3 - integral squares of 1-5
