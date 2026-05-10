@@ -21,11 +21,21 @@ def game_menu():
     Pole = [0, 1, 2]
     man_choice=0
     comp_choice=random.randint(0, 2)
-    for i in range(Pole.__len__()): print (i, "- ", Element[i])
-    man_choice = int(input("Enter your choice>"))
-    if victory(man_choice,comp_choice)=="Computer": print(f' Sorry, your lost, but the computer chose {Element[comp_choice]}')
-    if victory(man_choice, comp_choice) == "Man": print(f' You won! The computer chose {Element[comp_choice]}')
-    if victory(man_choice, comp_choice) == "Draw": print(f' There is a draw, but the computer chose {Element[comp_choice]}')
+    while man_choice != "exit":
+       for i in range(Pole.__len__()): print (i, "- ", Element[i])
+       print ("exit")
+       man_choice = input("Enter your choice>")
+       if man_choice!="exit":
+          try:
+           if int(man_choice) in Pole:
+             man_choice = int(man_choice)
+             if victory(int(man_choice), comp_choice) == "Computer": print(f' Sorry, your lost, but the computer chose {Element[comp_choice]}')
+             if victory(man_choice, comp_choice) == "Man": print(f' You won! The computer chose {Element[comp_choice]}')
+             if victory(man_choice, comp_choice) == "Draw": print(f' There is a draw, but the computer chose {Element[comp_choice]}')
+          except ValueError:
+            print("Invalid input.")
+          else:
+             print("Invalid input.")
     return
 
 print(game_menu())
