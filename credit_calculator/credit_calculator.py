@@ -1,67 +1,94 @@
 import math
-"""
-def rozrah(Sum, Type):
-    result="Error"
-    if Type == 'm':
-        paymonth=int(input("Enter the monthly payment:"))
-        result="It will take "+str(round(Sum/paymonth)+0.5)+" months to repay the loan"
-    if Type == 'p':
-        paymonth = int(input("Enter the number of months:"))
-        payment=round(Sum/(paymonth)+0.5)
-        lastpayment = Sum-(paymonth-1) * payment
-        result="Your monthly payment = "+ str(payment) +" and the last payment = "+ str(lastpayment)
-    return result
+import argparse
+import sys
+
+class CustomArgumentParser(argparse.ArgumentParser):
+    def error(self, message):
+        # Дія замість стандартного виклику sys.exit(2)
+        print(f"Incorrect parameters: {message}", file=sys.stderr)
+        sys.exit(2)
 
 
-pochsum = int(input("Enter the loan principal:"))
-print("What do you want to calculate?")
-print('type "m" – for number of monthly payments,')
-print('type "p" – for the monthly payment:')
-print(rozrah(pochsum, input('>')))
-"""
+# 1. Створюємо парсер
+parser = CustomArgumentParser(description="Парсер з помилкою")
 
-def rozrah(Type):
-    result="Error"
+# 2. Додаємо аргументи
+parser.add_argument("--type", type=str, required=True, choices=["diff", "annuity"], help="Type")
+parser.add_argument("--principal", type=int, help="Principal")
+parser.add_argument("--periods", type=int, help="Periods")
+parser.add_argument("--interest", type=int, required=True, help="Interest")
+parser.add_argument("--payment", type=int, help="Payment")
+
+# 3. Парсимо аргументи
+args = parser.parse_args()
+
+if args.type=="diff":
+    if args.principal==None or args.periods==None:
+        print(f"Incorrect parameters" )
+        sys.exit(2)
+if args.type=="annuity":
+    CountParam=0
+    if args.principal!=None: CountParam=CountParam+1
+    if args.periods!=None: CountParam=CountParam+1
+    if args.payment!=None: CountParam=CountParam+1
+    if CountParam<2:
+        print(f"Incorrect parameters" )
+        sys.exit(2)
+
+# 4. Переносимо аргументи в змінні
+type = args.type
+principal = args.principal
+periods = args.periods
+interest = args.interest
+payment=args.payment
+
+def annuit (Type, Sum, MonthCount, Loan, Monthpay):
+    result=['']
     if Type == 'n':
-        print("Enter the loan principal:")
-        Sum=int(input(">"))
-        print("Enter the monthly payment:")
-        Monthpay = int(input(">"))
-        print("Enter the loan interest:")
-        Loan = float(input(">"))
         NomLoan=(Loan/(12*100))
         MontsCount=round(math.log(Monthpay/(Monthpay-NomLoan*Sum), (1+NomLoan))+0.5)
         YearCount=round(MontsCount/12-0.5)
         LastMonthCount=MontsCount-YearCount*12
-        result = "It will take "
-        if YearCount>0: result= result+str(YearCount)+" years"
+        result[0] = 'It will take '
+        if YearCount>0: result[0]= result[0]+str(YearCount)+' years'
         if LastMonthCount>0:
-            if YearCount > 0: result = result + " and "
-            result=result + str(LastMonthCount)+ " months to repay this loan!"
+            if YearCount > 0: result[0] = result[0] + " and "
+            result[0]=result[0] + str(LastMonthCount)+ " months to repay this loan!"
     if Type=='a':
-        print("Enter the loan principal:")
-        Sum = int(input(">"))
-        print("Enter the number of periods:")
-        MonthCount = int(input(">"))
-        print("Enter the loan interest:")
-        Loan = float(input(">"))
         NomLoan = (Loan / (12 * 100))
         MonthPay=(Sum*(NomLoan*math.pow((1+NomLoan), MonthCount)))/(math.pow((1+NomLoan),MonthCount) -1)
-        result= "Your monthly payment = "+str(round(MonthPay+0.5))+"!"
+        result[0]= "Your monthly payment = "+str(round(MonthPay+0.5))+"!"
+        AllSum=0
+        for i in range(1, MonthCount+1):
+            AllSum=AllSum+round(MonthPay+0.5)
+        result.append("")
+        result.append("Overpayment = " + str(round(AllSum - Sum)))
+
     if Type == 'p':
-        print("Enter the annuity payment:")
-        MonthPay = float(input(">"))
-        print("Enter the number of periods:")
-        MonthCount = int(input(">"))
-        print("Enter the loan interest:")
-        Loan = float(input(">"))
+
         NomLoan = (Loan / (12 * 100))
-        Sum = MonthPay / ((NomLoan * math.pow((1 + NomLoan), MonthCount))/ (math.pow((1 + NomLoan), MonthCount) - 1))
-        result="Your loan principal ="+str (round(Sum))+"!"
+        Sum = Monthpay / ((NomLoan * math.pow((1 + NomLoan), MonthCount))/ (math.pow((1 + NomLoan), MonthCount) - 1))
+        result[0]="Your loan principal ="+str (round(Sum))+"!"
     return result
 
-print("What do you want to calculate?")
-print('type "n" for number of monthly payments,')
-print('type "a" for annuity monthly payment amount,')
-print('type "p" for loan principal:')
-print(rozrah(input('>')))
+def diff (Sum, MonthCount, Loan):
+        result = ['']
+        NomLoan = (Loan / (12 * 100))
+        AllSum=0
+        for i in range(1, MonthCount+1):
+            Dm=round(Sum/MonthCount+NomLoan*(Sum-(Sum*(i-1)/MonthCount))+0.5)
+            AllSum=AllSum+Dm
+            result.append ("Month "+str(i)+" : payment is "+str(Dm))
+        result.append("")
+        result.append ("Overpayment = "+str(round(AllSum-Sum)))
+        return result
+
+
+
+
+if type == "diff": print('\n'.join(diff(principal, periods, interest)))
+if type=="annuity":
+    if payment==None: print('\n'.join(annuit("a", principal, periods, interest, 0)))
+    if periods==None: print('\n'.join(annuit("n", principal, 0, interest, payment)))
+    if principal==None: print('\n'.join(annuit("p", 0, periods, interest, payment)))
+
