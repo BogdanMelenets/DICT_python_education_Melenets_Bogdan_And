@@ -1,8 +1,11 @@
 import string
 import requests
 from bs4 import BeautifulSoup
+import os
+
 # оскільки статті стали платними <body> відсутнє то будемо записувати в файл
 # тізер статей з тегу <article__teaser>
+# типи статей News Feature/News
 
 def filename_new(title):
     translator = str.maketrans("", "", string.punctuation)
@@ -18,6 +21,15 @@ def parse_nature_news():
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     }
+
+    print("Уведить кількість сторінок для пошуку")
+    art_count = int(input(">"))
+
+
+    print("Уведить типи статей через символ /")
+    art_type=input()
+    select_type = art_type.split("/")
+
 
     try:
         response = requests.get(target_url, headers=headers, timeout=15)
@@ -35,7 +47,9 @@ def parse_nature_news():
     full_saved_count = 0
     teaser_saved_count = 0
 
+    count=1
     for article in articles:
+
         # Шукаємо тип статті всередині тега <span> з атрибутом data-test="article.type"
         type_tag = article.find("span", {"data-test": "article.type"})
         if not type_tag:
@@ -43,8 +57,9 @@ def parse_nature_news():
 
         article_type = type_tag.get_text(strip=True)
 
-        # Відбираємо лише статті типу "News"
-        if article_type == "News":
+        # Відбираємо статті із select_type
+        if (article_type in select_type):
+
             # Шукаємо посилання на вміст статті всередині <a> з data-track-action="view article"
             link_tag = article.find("a", {"data-track-action": "view article"})
             if not link_tag or not link_tag.get("href"):
@@ -53,7 +68,7 @@ def parse_nature_news():
             article_title = link_tag.get_text(strip=True)
             article_url = base_url + link_tag.get("href")
 
-            print(f"\nОбробка статті 'News': '{article_title}'")
+            print(f"\nОбробка статті: '{article_title}'")
 
             # Завантажуємо внутрішню сторінку статті
             try:
@@ -87,7 +102,8 @@ def parse_nature_news():
                 body_text = body_tag.get_text()
 
                 # Зберігаємо повний вміст у бінарному режимі ('wb') з кодуванням UTF-8
-                with open(filename, "wb") as file:
+                os.makedirs(str(count), exist_ok=True)
+                with open(str(count)+"/"+filename, "wb") as file:
                     file.write(body_text.encode("utf-8"))
 
                 print(f"-> Повний текст успішно збережено у файл: {filename}")
@@ -107,7 +123,8 @@ def parse_nature_news():
                     prefix = "[Повний текст недоступний. Короткий тизер статті]:\n\n"
                     full_content = prefix + teaser_text
 
-                    with open(filename, "wb") as file:
+                    os.makedirs(str(count), exist_ok=True)
+                    with open(str(count) + "/" + filename, "wb") as file:
                         file.write(full_content.encode("utf-8"))
 
                     print(
@@ -118,6 +135,8 @@ def parse_nature_news():
                     print(
                         f"-> Помилка: Для статті '{article_title}' не знайдено ні тіла, ні тизеру."
                     )
+                count = count + 1
+                if count - 1 == art_count: break
 
     # Підсумкове повідомлення про результат роботи програми
     print("\n==================================================")
