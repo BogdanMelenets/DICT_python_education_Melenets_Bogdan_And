@@ -30,3 +30,42 @@ print(data["usd"]["rate"])
 
 print("EUR:")
 print(data["eur"]["rate"])
+
+import requests
+
+base_currency = input().lower()
+
+url = f"http://www.floatrates.com/daily/{base_currency}.json"
+rates = requests.get(url).json()
+
+cache = {}
+
+if "usd" in rates:
+    cache["usd"] = rates["usd"]
+
+if "eur" in rates:
+    cache["eur"] = rates["eur"]
+
+while True:
+
+    target_currency = input().lower()
+
+    if target_currency == "":
+        break
+
+    amount = float(input())
+
+    print("Checking the cache...")
+
+    if target_currency in cache:
+        print("It is in the cache!")
+        rate = cache[target_currency]["rate"]
+
+    else:
+        print("Sorry, but it is not in the cache!")
+        rate = rates[target_currency]["rate"]
+        cache[target_currency] = rates[target_currency]
+
+    result = amount * rate
+
+    print(f"You received {round(result, 2)} {target_currency.upper()}.")
