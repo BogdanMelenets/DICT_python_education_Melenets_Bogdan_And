@@ -199,3 +199,18 @@ def computer_move():
 
     if stock_pieces:
         computer_pieces.append(stock_pieces.pop())
+
+def draw_game():
+
+    left = domino_snake[0][0]
+    right = domino_snake[-1][1]
+
+    if left != right:
+        return False
+
+    count = 0
+
+    for piece in domino_snake:
+        count += piece.count(left)
+
+    return count == 8
