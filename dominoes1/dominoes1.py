@@ -59,3 +59,80 @@ if status == "player":
     print("Status: It's your turn to make a move. Enter your command.")
 else:
     print("Status: Computer is about to make a move. Press Enter to continue...")
+
+while True:
+
+    print("=" * 70)
+    print("Stock size:", len(stock_pieces))
+    print("Computer pieces:", len(computer_pieces))
+    print()
+
+    if len(domino_snake) > 6:
+        print(
+            ''.join(map(str, domino_snake[:3])) +
+            "..." +
+            ''.join(map(str, domino_snake[-3:]))
+        )
+    else:
+        print(''.join(map(str, domino_snake)))
+
+    print("\nYour pieces:")
+
+    for i, piece in enumerate(player_pieces, 1):
+        print(f"{i}:{piece}")
+
+    print()
+
+    if len(player_pieces) == 0:
+        print("Status: The game is over. You won!")
+        break
+
+    if len(computer_pieces) == 0:
+        print("Status: The game is over. The computer won!")
+        break
+
+    if status == "player":
+
+        print("Status: It's your turn to make a move. Enter your command.")
+
+        while True:
+            try:
+                move = int(input())
+            except ValueError:
+                print("Invalid input. Please try again.")
+                continue
+
+            if abs(move) > len(player_pieces):
+                print("Invalid input. Please try again.")
+                continue
+
+            break
+
+        if move == 0:
+            if stock_pieces:
+                player_pieces.append(stock_pieces.pop())
+        elif move > 0:
+            domino_snake.append(player_pieces.pop(move - 1))
+        else:
+            domino_snake.insert(0, player_pieces.pop(abs(move) - 1))
+
+        status = "computer"
+
+    else:
+
+        print("Status: Computer is about to make a move. Press Enter to continue...")
+        input()
+
+        move = random.randint(-len(computer_pieces), len(computer_pieces))
+
+        if move == 0:
+            if stock_pieces:
+                computer_pieces.append(stock_pieces.pop())
+
+        elif move > 0:
+            domino_snake.append(computer_pieces.pop(move - 1))
+
+        else:
+            domino_snake.insert(0, computer_pieces.pop(abs(move) - 1))
+
+        status = "player"
