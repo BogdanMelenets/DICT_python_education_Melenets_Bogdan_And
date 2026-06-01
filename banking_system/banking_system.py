@@ -75,3 +75,97 @@ while True:
     elif choice == "0":
         print("\nBye!")
         break
+
+import random
+
+accounts = {}
+
+
+def generate_pin():
+    return str(random.randint(0, 9999)).zfill(4)
+
+
+def luhn_checksum(number):
+    digits = [int(x) for x in number]
+
+    for i in range(len(digits)):
+        if i % 2 == 0:
+            digits[i] *= 2
+            if digits[i] > 9:
+                digits[i] -= 9
+
+    total = sum(digits)
+    return (10 - total % 10) % 10
+
+
+def generate_card_number():
+    while True:
+        account_identifier = str(random.randint(0, 999999999)).zfill(9)
+
+        card_without_checksum = "400000" + account_identifier
+
+        checksum = luhn_checksum(card_without_checksum)
+
+        card_number = card_without_checksum + str(checksum)
+
+        if card_number not in accounts:
+            return card_number
+
+
+while True:
+    print("1. Create an account")
+    print("2. Log into the account")
+    print("0. Exit")
+
+    choice = input()
+
+    if choice == "1":
+        card_number = generate_card_number()
+        pin = generate_pin()
+
+        accounts[card_number] = {
+            "pin": pin,
+            "balance": 0
+        }
+
+        print("\nYour card has been created")
+        print("Your card number:")
+        print(card_number)
+        print("Your card PIN:")
+        print(pin)
+        print()
+
+    elif choice == "2":
+        print("\nEnter your card number:")
+        card = input()
+
+        print("Enter your PIN:")
+        pin = input()
+
+        if card in accounts and accounts[card]["pin"] == pin:
+            print("\nYou have successfully logged in!\n")
+
+            while True:
+                print("1. Balance")
+                print("2. Log out")
+                print("0. Exit")
+
+                account_choice = input()
+
+                if account_choice == "1":
+                    print(f"\nBalance: {accounts[card]['balance']}\n")
+
+                elif account_choice == "2":
+                    print("\nYou have successfully logged out!\n")
+                    break
+
+                elif account_choice == "0":
+                    print("\nBye!")
+                    exit()
+
+        else:
+            print("\nWrong card number or PIN!\n")
+
+    elif choice == "0":
+        print("\nBye!")
+        break
