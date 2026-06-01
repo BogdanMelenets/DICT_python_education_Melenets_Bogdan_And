@@ -38,3 +38,24 @@ print("Computer pieces:", computer_pieces)
 print("Player pieces:", player_pieces)
 print("Domino snake:", domino_snake)
 print("Status:", status)
+
+print("=" * 70)
+
+print("Stock size:", len(stock_pieces))
+print("Computer pieces:", len(computer_pieces))
+
+print()
+print(*domino_snake, sep="")
+
+print()
+print("Your pieces:")
+
+for i, piece in enumerate(player_pieces, 1):
+    print(f"{i}:{piece}")
+
+print()
+
+if status == "player":
+    print("Status: It's your turn to make a move. Enter your command.")
+else:
+    print("Status: Computer is about to make a move. Press Enter to continue...")
