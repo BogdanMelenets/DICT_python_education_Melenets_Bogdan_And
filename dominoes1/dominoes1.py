@@ -136,3 +136,30 @@ while True:
             domino_snake.insert(0, computer_pieces.pop(abs(move) - 1))
 
         status = "player"
+
+def legal_move(piece, side):
+
+    left = domino_snake[0][0]
+    right = domino_snake[-1][1]
+
+    temp = piece[:]
+
+    if side == "left":
+
+        if temp[1] == left:
+            return temp
+
+        if temp[0] == left:
+            temp.reverse()
+            return temp
+
+    if side == "right":
+
+        if temp[0] == right:
+            return temp
+
+        if temp[1] == right:
+            temp.reverse()
+            return temp
+
+    return None
