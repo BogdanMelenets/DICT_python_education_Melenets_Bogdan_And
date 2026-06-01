@@ -16,3 +16,17 @@ print(f"I will get {round(mycoins * ars_rate, 2)} ARS from the sale of {mycoins}
 print(f"I will get {round(mycoins * hnl_rate, 2)} HNL from the sale of {mycoins} mycoins.")
 print(f"I will get {round(mycoins * aud_rate, 2)} AUD from the sale of {mycoins} mycoins.")
 print(f"I will get {round(mycoins * mad_rate, 2)} MAD from the sale of {mycoins} mycoins.")
+
+import requests
+
+currency = input("Enter currency code: ").lower()
+
+url = f"http://www.floatrates.com/daily/{currency}.json"
+
+data = requests.get(url).json()
+
+print("USD:")
+print(data["usd"]["rate"])
+
+print("EUR:")
+print(data["eur"]["rate"])
