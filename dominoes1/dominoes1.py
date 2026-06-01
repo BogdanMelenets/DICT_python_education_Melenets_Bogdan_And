@@ -164,55 +164,38 @@ def legal_move(piece, side):
 
     return None
 
-# Перевірка ходу гравця:
-piece = player_pieces[abs(move)-1]
+def computer_move():
 
-if move > 0:
+    count = {i: 0 for i in range(7)}
 
-    result = legal_move(piece, "right")
+    for piece in computer_pieces + domino_snake:
+        count[piece[0]] += 1
+        count[piece[1]] += 1
 
-    if result is None:
-        print("Illegal move. Please try again.")
-        continue
+    scores = []
 
-    domino_snake.append(result)
+    for piece in computer_pieces:
 
-else:
+        score = count[piece[0]] + count[piece[1]]
+        scores.append((score, piece))
 
-    result = legal_move(piece, "left")
+    scores.sort(reverse=True)
 
-    if result is None:
-        print("Illegal move. Please try again.")
-        continue
+    for score, piece in scores:
 
-    domino_snake.insert(0, result)
-
-player_pieces.remove(piece)
-
-# Для комп'ютера:
-possible = list(range(-len(computer_pieces), len(computer_pieces)+1))
-random.shuffle(possible)
-
-for move in possible:
-
-    if move == 0:
-        continue
-
-    piece = computer_pieces[abs(move)-1]
-
-    if move > 0:
-        result = legal_move(piece, "right")
-        if result:
-            domino_snake.append(result)
-            computer_pieces.remove(piece)
-            break
-
-    else:
         result = legal_move(piece, "left")
+
         if result:
             domino_snake.insert(0, result)
             computer_pieces.remove(piece)
-            break
-else:
+            return
+
+        result = legal_move(piece, "right")
+
+        if result:
+            domino_snake.append(result)
+            computer_pieces.remove(piece)
+            return
+
     if stock_pieces:
         computer_pieces.append(stock_pieces.pop())
